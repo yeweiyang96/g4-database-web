@@ -1,0 +1,19 @@
+<form class="example-form">
+
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label for="search-box">Search</mat-label>
+  <input matInput #searchBox id="search-box" placeholder="Pick one" (input)="search(searchBox.value)" type="search" [matAutocomplete]="auto"/>
+</mat-form-field>
+<mat-chip-listbox aria-label="search bar selection" class="chip" (change)="onSelected($event)">
+  <mat-chip-option selected>Species</mat-chip-option>
+  <mat-chip-option >Gene</mat-chip-option>
+</mat-chip-listbox>
+
+<mat-autocomplete #auto="matAutocomplete">
+<mat-option *ngFor="let one of species$ | async" [value]="one.name" routerLink="/species/{{one.abbreviation}}" >
+  <div mat-line>{{one.name}} </div>
+  <span mat-line class="no-match"> {{one.abbreviation}}</span>
+</mat-option>
+</mat-autocomplete>
+
+</form>

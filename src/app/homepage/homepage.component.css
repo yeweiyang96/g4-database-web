@@ -1,0 +1,21 @@
+.page-header {
+  max-height: 1000px;
+  background: rgb(240, 240, 240);
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (orientation: landscape){
+  .page-header {
+    min-height: 80vh;
+  }
+}
+
+@media screen and (orientation: portrait){
+  .page-header {
+    min-height: 50vh;
+  }
+}

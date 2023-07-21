@@ -1,0 +1,27 @@
+footer {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /*border-top: .0625rem solid rgba(0,0,0,.1);*/
+  min-height: 3rem;
+  max-height: 4rem;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  min-width: 50%;
+}
+ .center span{
+   text-align: center;
+   font-style: normal;
+   color: #3c8dcc;
+   line-height: 1.6;
+   font-weight: 600;
+
+ }
