@@ -41,4 +41,8 @@ export class ApiService {
     const url = `${this.apiUrl}/species_info/${abb}`;
     return this.http.get<Species>(url);
   }
+  getName(abb: string): Observable<string> {
+    const url = `${this.apiUrl}/abbtofull/${abb}`;
+    return this.http.get<string>(url);
+  }
 }

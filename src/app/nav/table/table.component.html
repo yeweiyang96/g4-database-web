@@ -1,0 +1,14 @@
+<h1>{{chromosome}}</h1>
+<!-- <ng-container *ngIf="(asyncTabs | async) === null">
+  Loading tabs...
+</ng-container> -->
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <a mat-tab-link
+     (click)="activeLink = 'raw'"
+     [active]="activeLink == 'raw'"> Raw </a>
+     <a mat-tab-link
+     (click)="activeLink = 'complement'"
+     [active]="activeLink == 'complement'"> Complement </a>
+</nav>
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+

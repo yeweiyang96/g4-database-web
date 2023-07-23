@@ -9,7 +9,7 @@
     </mat-form-field>
     <mat-nav-list>
       <a mat-list-item routerLink="info" class="list">Information</a>
-      <a mat-list-item routerLink="{{genome}}" *ngFor="let genome of filter_genomes$ | async" class="list">{{genome}}</a>
+      <a mat-list-item routerLink="{{genome}}" *ngFor="let genome of filter_genomes$ | async" class="list" (click)="onClick(genome)">{{genome}}</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -22,7 +22,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>{{species.name}}</span>
+      <span>{{name}}</span>
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>

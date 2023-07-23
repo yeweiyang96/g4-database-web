@@ -30,6 +30,8 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import {MatExpansionModule} from '@angular/material/expansion';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { TableComponent } from './nav/table/table.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     HomesearchComponent,
     SpeciesInfoComponent,
     NavComponent,
-    DashboardComponent
+    DashboardComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatCardModule,
     MatMenuModule,
     MatExpansionModule,
-    ScrollingModule
+    ScrollingModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

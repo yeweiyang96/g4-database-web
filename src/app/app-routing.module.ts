@@ -4,13 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { NavComponent } from './nav/nav.component';
 import { DashboardComponent } from './nav/dashboard/dashboard.component';
+import { TableComponent } from './nav/table/table.component';
 
 const routes: Routes = [
-  {path: 'home', component: HomepageComponent},
-  {path: 'species/:name',component:NavComponent,
+  {path: 'home', component: HomepageComponent, title: 'Home'},
+  {path: 'species/:abb',component:NavComponent, title: 'Species',
   children: [
     {path: 'info', component: DashboardComponent},
-    {path: '', redirectTo: 'info', pathMatch: 'full'}
+    {path: ':genome', component: TableComponent},
+    {path: '', redirectTo: 'info', pathMatch: 'full'},
+    {path: '**', redirectTo: 'info', pathMatch: 'full'}
   ]
 },
   // {

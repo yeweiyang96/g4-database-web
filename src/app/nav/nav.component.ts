@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/api.service';
 
 import { FormControl } from '@angular/forms';
 import { SearchResult } from '../pojo/SearchResult';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -16,19 +17,28 @@ import { SearchResult } from '../pojo/SearchResult';
 export class NavComponent implements OnInit {
   myControl = new FormControl('');
   genomes$!: string[];
-  species!: SearchResult;
+  // species!: SearchResult;
   filter_genomes$!: Observable<string[]>;
+  abb!: string;
+  name!: string;
 
   private breakpointObserver = inject(BreakpointObserver);
   constructor(
     private apiService: ApiService,
+    private router: ActivatedRoute,
     private MessageService: MessageService
     ) {
-      this.species = this.MessageService.getName();
+      this.abb = String(this.router.snapshot.paramMap.get('abb'));
+      this.MessageService.setName({name: this.name,abbreviation: this.abb});
     }
 
   ngOnInit(): void {
-    this.apiService.getGenomes(this.species.abbreviation).subscribe(data => {
+    this.apiService.getName(this.abb).subscribe(data => {
+      this.name = data;
+      this.MessageService.setName({name: this.name,abbreviation: this.abb});
+    });
+
+    this.apiService.getGenomes(this.abb).subscribe(data => {
       this.genomes$ = data;
       this.filter_genomes$ = this.myControl.valueChanges.pipe(
         startWith(''),
@@ -54,5 +64,9 @@ export class NavComponent implements OnInit {
     return this.genomes$.filter(option => {
       return option.toLowerCase().includes(filterValue);
     });
+  }
+
+  onClick(genome: string) {
+    this.MessageService.chromosome$.next(genome);
   }
 }
