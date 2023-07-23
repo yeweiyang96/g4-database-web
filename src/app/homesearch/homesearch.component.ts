@@ -1,9 +1,10 @@
 import { Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { ApiService } from './../api.service';
 import { Component, OnInit } from '@angular/core';
-import { Species } from '../pojo/Species';
-
+import { SearchResult } from '../pojo/SearchResult';
 import {FormControl} from '@angular/forms';
+import { Search } from '../pojo/Search';
+
 
 @Component({
   selector: 'app-homesearch',
@@ -11,15 +12,18 @@ import {FormControl} from '@angular/forms';
   styleUrls: ['./homesearch.component.css']
 })
 export class HomesearchComponent implements OnInit{
-  myControl = new FormControl('');
-  species$!: Observable<Species[]>;
-  private searchTerms = new Subject<string>();
-  selected = 'Species';
+  myControl = new FormControl();
+  species$!: Observable<SearchResult[]>;
+  private searchTerms = new Subject<Search>();
+  selected = 'species';
 
   constructor(private apiService: ApiService) { }
 
   search(term: string): void {
-    this.searchTerms.next(term);
+    if (this.selected === 'gene'){
+      term = term.toUpperCase();
+    }
+    this.searchTerms.next({term: term, type: this.selected});
   }
 
   ngOnInit(): void {
@@ -32,13 +36,13 @@ export class HomesearchComponent implements OnInit{
       distinctUntilChanged(),
 
       // switch to new search observable each time the term changes
-      switchMap((term: string) => this.apiService.searchSpecies(term)),
+      switchMap((search: Search) => this.apiService.search(search)),
     );
   }
 
   onSelected(event: any) {
     this.selected = event.value;
-    this.apiService.switchSearch(event.value);
+    this.myControl.setValue('');
   }
 
 }

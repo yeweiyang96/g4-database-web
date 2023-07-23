@@ -2,10 +2,11 @@ import { SpeciesInfoComponent } from './species-info/species-info.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
+import { NavComponent } from './nav/nav.component';
 
 const routes: Routes = [
   {path: 'home', component: HomepageComponent},
-  {path: 'species/:name',component:SpeciesInfoComponent},
+  {path: 'species/:name',component:NavComponent},
   // {
   //   path: 'taxonomy/:name', component: SpeciesInfoComponent,
   //   children: [
