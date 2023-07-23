@@ -23,6 +23,13 @@ import { SpeciesInfoComponent } from './species-info/species-info.component';
 import { NavComponent } from './nav/nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { DashboardComponent } from './nav/dashboard/dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+
+import {MatExpansionModule} from '@angular/material/expansion';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -32,7 +39,8 @@ import { MatListModule } from '@angular/material/list';
     HomepageComponent,
     HomesearchComponent,
     SpeciesInfoComponent,
-    NavComponent
+    NavComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +59,12 @@ import { MatListModule } from '@angular/material/list';
     ReactiveFormsModule,
     MatChipsModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatExpansionModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,4 @@
+import { MessageService } from './../message.service';
 import { Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { ApiService } from './../api.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,11 +14,14 @@ import { Search } from '../pojo/Search';
 })
 export class HomesearchComponent implements OnInit{
   myControl = new FormControl();
-  species$!: Observable<SearchResult[]>;
+  result$!: Observable<SearchResult[]>;
   private searchTerms = new Subject<Search>();
   selected = 'species';
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private MessageService: MessageService
+    ) { }
 
   search(term: string): void {
     if (this.selected === 'gene'){
@@ -28,7 +32,7 @@ export class HomesearchComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.species$ = this.searchTerms.pipe(
+    this.result$ = this.searchTerms.pipe(
       // wait 300ms after each keystroke before considering the term
       debounceTime(300),
 
@@ -43,6 +47,10 @@ export class HomesearchComponent implements OnInit{
   onSelected(event: any) {
     this.selected = event.value;
     this.myControl.setValue('');
+  }
+
+  onClick(name: SearchResult){
+    this.MessageService.setName(name);
   }
 
 }

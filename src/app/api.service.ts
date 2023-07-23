@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { SearchResult } from './pojo/SearchResult';
 import { Gene } from './pojo/Gene';
 import { Search } from './pojo/Search';
+import { Species } from './pojo/Species';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,10 @@ export class ApiService {
   getGenomes(name: string): Observable<string[]> {
     const url = `${this.apiUrl}/genomes/${name}`;
     return this.http.get<string[]>(url);
+  }
+
+  getSpeciesInfo(abb: string): Observable<Species> {
+    const url = `${this.apiUrl}/species_info/${abb}`;
+    return this.http.get<Species>(url);
   }
 }

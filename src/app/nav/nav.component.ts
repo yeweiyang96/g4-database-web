@@ -1,10 +1,12 @@
+import { MessageService } from './../message.service';
 import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/api.service';
-import { ActivatedRoute } from '@angular/router';
+
 import { FormControl } from '@angular/forms';
+import { SearchResult } from '../pojo/SearchResult';
 
 @Component({
   selector: 'app-nav',
@@ -14,24 +16,26 @@ import { FormControl } from '@angular/forms';
 export class NavComponent implements OnInit {
   myControl = new FormControl('');
   genomes$!: string[];
-  name: string = '';
+  species!: SearchResult;
   filter_genomes$!: Observable<string[]>;
 
   private breakpointObserver = inject(BreakpointObserver);
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {
-    this.route.params.subscribe(params => {
-      this.name = params['name'];
-    });
-  }
+  constructor(
+    private apiService: ApiService,
+    private MessageService: MessageService
+    ) {
+      this.species = this.MessageService.getName();
+    }
 
   ngOnInit(): void {
-    this.apiService.getGenomes(this.name).subscribe(data => {
+    this.apiService.getGenomes(this.species.abbreviation).subscribe(data => {
       this.genomes$ = data;
       this.filter_genomes$ = this.myControl.valueChanges.pipe(
         startWith(''),
         map(value => this._filter(value || ''))
       );
     });
+
 
   }
 

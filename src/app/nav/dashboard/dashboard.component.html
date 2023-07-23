@@ -1,0 +1,85 @@
+<div class="grid-container">
+  <mat-grid-list cols="4" rowHeight="4rem">
+    <mat-grid-tile [colspan]="4" [rowspan]="9">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{speciesInfo.species_name}}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="dashboard-card-content">
+          <mat-list role="list">
+            <mat-list-item role="listitem"><span
+                class="item-title">Abbreviation</span>{{speciesInfo.abbreviation}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span
+                class="item-title">Institution</span>{{speciesInfo.institution}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span
+                class="item-title">Reference</span>{{speciesInfo.reference}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Source</span>{{speciesInfo.source}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Release
+                Date</span>{{speciesInfo.rel_date}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Modification
+                Date</span>{{speciesInfo.mod_date}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Update</span>{{speciesInfo.update}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Total
+                Gene</span>{{speciesInfo.total_genes}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Total
+                Length</span>{{speciesInfo.total_length}}</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem"><span class="item-title">Number of
+                chromosomes</span>{{speciesInfo.num_chr}}</mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="5">
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  RefSeq
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <cdk-virtual-scroll-viewport [itemSize]="10" class="vscroll-viewport">
+                <p *cdkVirtualFor="let seq of speciesInfo.refseq.split(',')" class="vscroll-item">{{seq}}</p>
+              </cdk-virtual-scroll-viewport>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="5">
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  GenBank
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <cdk-virtual-scroll-viewport [itemSize]="10" class="vscroll-viewport">
+                <p *cdkVirtualFor="let seq of speciesInfo.genbank.split(',')" class="vscroll-item">{{seq}}</p>
+              </cdk-virtual-scroll-viewport>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="4" [rowspan]="3">
+      <app-footer></app-footer>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+

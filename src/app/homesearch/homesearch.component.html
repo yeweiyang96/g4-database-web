@@ -1,19 +1,26 @@
 <form class="example-form">
 
-<mat-form-field class="example-full-width" appearance="outline">
-  <mat-label for="search-box">Search</mat-label>
-  <input matInput #searchBox id="search-box" placeholder="Pick one" (input)="search(searchBox.value)" type="search" [matAutocomplete]="auto"  [formControl]="myControl"/>
-  <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let one of species$ | async" [value]="one.name" routerLink="/{{selected}}/{{one.abbreviation}}" >
-      <div mat-line>{{one.name}} </div>
-      <span mat-line class="no-match"> {{one.abbreviation}}</span>
-    </mat-option>
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label for="search-box">Search</mat-label>
+    <input matInput #searchBox id="search-box" placeholder="Pick one" (input)="search(searchBox.value)" type="search"
+      [matAutocomplete]="auto" [formControl]="myControl" />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let one of result$ | async" [value]="one.name"
+        routerLink="/{{selected}}/{{one.abbreviation}}" (click)="onClick(one)">
+        <div mat-line>{{one.name}} </div>
+        <span mat-line class="no-match"> {{one.abbreviation}}</span>
+      </mat-option>
+      <mat-option *ngIf="(result$ | async)?.length === 0">
+        <mat-icon color="">error</mat-icon>
+        <div mat-line>0 results</div>
+        <div mat-line class="no-match">No matching presidents</div>
+      </mat-option>
     </mat-autocomplete>
-</mat-form-field>
-<mat-chip-listbox aria-label="search bar selection" class="chip" (change)="onSelected($event)">
-  <mat-chip-option selected>species</mat-chip-option>
-  <mat-chip-option >gene</mat-chip-option>
-</mat-chip-listbox>
+  </mat-form-field>
+  <mat-chip-listbox aria-label="search bar selection" class="chip" (change)="onSelected($event)">
+    <mat-chip-option selected>species</mat-chip-option>
+    <mat-chip-option>gene</mat-chip-option>
+  </mat-chip-listbox>
 
 
 
