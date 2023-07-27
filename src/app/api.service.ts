@@ -13,7 +13,7 @@ import { G4 } from './pojo/G4';
 })
 export class ApiService {
 
-  private apiUrl = 'http://192.168.1.3:8000';
+  private apiUrl = 'https://g4.haise.gq:8080';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
