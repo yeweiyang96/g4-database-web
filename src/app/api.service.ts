@@ -8,6 +8,7 @@ import { Search } from './pojo/Search';
 import { Species } from './pojo/Species';
 import { G4 } from './pojo/G4';
 import { Gene } from './pojo/Gene';
+import { G4_SEQ } from './pojo/G4_SEQ';
 
 @Injectable({
   providedIn: 'root'
@@ -88,4 +89,7 @@ export class ApiService {
     return this.http.get<Gene>(`${this.apiUrl}/gene/${abb}/${name}`);
   }
 
+  getG4SEQ(abb: string, genome: string, name: string): Observable<G4_SEQ> {
+    return this.http.get<G4_SEQ>(`${this.apiUrl}/g4_seq/${abb}/${genome}/${name}`);
+  }
 }

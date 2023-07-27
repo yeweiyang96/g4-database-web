@@ -1,7 +1,5 @@
 <h1>{{chromosome}}</h1>
-<!-- <ng-container *ngIf="(asyncTabs | async) === null">
-  Loading tabs...
-</ng-container> -->
+
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
   <a mat-tab-link
      (click)="activeLink = 'raw'; onClick('raw')"
@@ -32,12 +30,12 @@
           <th nzColumnKey="TS" [nzSortFn]="true">Number of tetrads</th>
           <th nzColumnKey="GS" [nzSortFn]="true">G-Score</th>
           <th nzColumnKey="SEQ" nzCustomFilter [nzFilterFn]="true">
-            Sequence
+            Sequence<br><span *ngIf="(direction === 'c')" >(G-Rich)</span>
             <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
               <mat-icon>search</mat-icon>
             </nz-filter-trigger>
           </th>
-          <th nzColumnKey="Complement">Complement</th>
+          <th nzColumnKey="Complement" *ngIf="(direction === 'c')" >Complement<br>(C-rich)</th>
           <th nzColumnKey="Gene">Gene</th>
           <th nzColumnKey="Promoter">Promoter</th>
         </tr>
@@ -52,7 +50,7 @@
           <td>{{data.TS}}</td>
           <td>{{data.GS}}</td>
           <td nzBreakWord>{{data.SEQ}}</td>
-          <td nzBreakWord>{{complement(data.SEQ)}}</td>
+          <td nzBreakWord *ngIf="(direction === 'c')" class="complement">{{complement(data.SEQ)}}</td>
           <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
           <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
         </tr>

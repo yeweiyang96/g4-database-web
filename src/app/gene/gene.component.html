@@ -1,18 +1,114 @@
-<mat-card class="card">
-  <mat-card-header>
+<ng-container *ngIf="gene === undefined" class="loading">
+  Loading page...
+</ng-container>
+<div class="grid-container" *ngIf="gene">
+  <mat-card class="dashboard-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>{{gene.name}}</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="dashboard-card-content">
+      <mat-list role="list">
+        <mat-list-item role="listitem"><span class="item-title">Gene</span>{{gene.gene}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Type</span>{{gene.type}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Location</span>{{gene.location}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Translate
+            Table</span>{{gene.transl_table}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Codon Start</span>{{gene.codon_start}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Protein ID</span><a
+            [href]='"https://www.ncbi.nlm.nih.gov/protein/"+gene.protid'>{{gene.protid}}</a></mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Gene ID</span>{{gene.geneid}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">gi</span>{{gene.gi}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Description</span>{{gene.descr}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">aalen</span>{{gene.aalen}}</mat-list-item>
+        <mat-list-item role="listitem"><span class="item-title">Chromosome</span><a
+            routerLink="/species/{{gene.abbreviation}}/{{gene.chrname}}">{{gene.abbreviation}}:{{gene.chrname}}</a></mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="dashboard-card">
+    <!-- <mat-card-header>
     <mat-card-title>
-      <h1>Gene</h1>
+      <h1>G4 Sequence</h1>
     </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    {{gene$ | async}}
-  </mat-card-content>
-</mat-card>
+  </mat-card-header> -->
+    <mat-card-content class="dashboard-card-content">
+      <ng-container *ngIf="table === undefined">
+        Loading tabs...
+      </ng-container>
+      <mat-tab-group *ngIf="table != undefined">
+        <mat-tab label="Raw">
+          <ng-template matTabContent>
+            <nz-table #basicTable [nzData]="dataSource_raw" nzTableLayout="fixed">
+              <thead>
+                <tr>
+                  <th *ngFor="let column of RawColumns">
+                    {{column}}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                  <td>{{ data.ID }}</td>
+                  <td>{{ data.T1 }}</td>
+                  <td>{{ data.T2 }}</td>
+                  <td>{{ data.T3 }}</td>
+                  <td>{{ data.T4 }}</td>
+                  <td>{{ data.TS }}</td>
+                  <td>{{ data.GS }}</td>
+                  <td>{{ data.SEQ }}</td>
+                  <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)"
+                      routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span
+                        *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
+                  <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)"
+                      routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+                </tr>
+              </tbody>
+            </nz-table>
+
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Complement">
+          <ng-template matTabContent>
+            <nz-table #basicTable [nzData]="dataSource_complement" nzTableLayout="fixed">
+              <thead>
+                <tr>
+                  <th *ngFor="let column of ComplementColumns">
+                    {{column}}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                  <td>{{ data.ID }}</td>
+                  <td>{{ data.T1 }}</td>
+                  <td>{{ data.T2 }}</td>
+                  <td>{{ data.T3 }}</td>
+                  <td>{{ data.T4 }}</td>
+                  <td>{{ data.TS }}</td>
+                  <td>{{ data.GS }}</td>
+                  <td nzBreakWord>{{ data.SEQ }}</td>
+                  <td nzBreakWord class="complement">{{complement(data.SEQ)}}</td>
+                  <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)"
+                      routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span
+                        *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
+                  <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)"
+                      routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
 
 
 
 
+<!-- <iframe src="https://jbrowse.org/code/jb2/v2.6.2/?session=local-DVUfbNz66" width="100%" height="500px" class="jbrowse">
 
-<iframe src="https://jbrowse.org/code/jb2/v2.6.2/?session=local-DVUfbNz66" width="100%" height="500px" class="jbrowse">
-
-</iframe>
+</iframe> -->
