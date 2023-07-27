@@ -26,7 +26,7 @@ export class ApiService {
     if (!search.term.trim()) {
       // if not search term, return empty array.
       return of([]);
-    } else if (search.type === 'gene' && search.term.length < 6) {
+    } else if (search.type === 'gene' && search.term.length < 2) {
       return of([]);
     }
     return this.http.get<SearchResult[]>(`${this.apiUrl}/${search.type}/${search.term}`);
