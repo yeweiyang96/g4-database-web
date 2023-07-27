@@ -33,6 +33,24 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { TableComponent } from './nav/table/table.component';
 import {MatTabsModule} from '@angular/material/tabs';
 
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+import { IconDefinition } from '@ant-design/icons-angular';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { GeneComponent } from './gene/gene.component';
+registerLocaleData(en);
+
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +61,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     SpeciesInfoComponent,
     NavComponent,
     DashboardComponent,
-    TableComponent
+    TableComponent,
+    GeneComponent
   ],
   imports: [
     BrowserModule,
@@ -69,8 +88,13 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatExpansionModule,
     ScrollingModule,
     MatTabsModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzButtonModule,
+    NzInputModule
+
   ],
-  providers: [],
+  providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

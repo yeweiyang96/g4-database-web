@@ -4,11 +4,66 @@
 </ng-container> -->
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
   <a mat-tab-link
-     (click)="activeLink = 'raw'"
+     (click)="activeLink = 'raw'; onClick('raw')"
      [active]="activeLink == 'raw'"> Raw </a>
      <a mat-tab-link
-     (click)="activeLink = 'complement'"
+     (click)="activeLink = 'complement';onClick('c')"
      [active]="activeLink == 'complement'"> Complement </a>
 </nav>
-<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+<mat-tab-nav-panel #tabPanel dynamicHeight>
+  <nz-table
+  nzTableLayout="fixed"
+      nzShowSizeChanger
+      [nzData]="G4Date"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzColumnKey="ID" [nzSortFn]="true">ID</th>
+          <th nzColumnKey="T1" [nzSortFn]="true">Position 1</th>
+          <th nzColumnKey="T2" [nzSortFn]="true">Position 2</th>
+          <th nzColumnKey="T3" [nzSortFn]="true">Position 3</th>
+          <th nzColumnKey="T4" [nzSortFn]="true">Position 4</th>
+          <th nzColumnKey="TS" [nzSortFn]="true">Number of tetrads</th>
+          <th nzColumnKey="GS" [nzSortFn]="true">G-Score</th>
+          <th nzColumnKey="SEQ" nzCustomFilter [nzFilterFn]="true">
+            Sequence
+            <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+              <mat-icon>search</mat-icon>
+            </nz-filter-trigger>
+          </th>
+          <th nzColumnKey="Gene">Gene(<span class="direction1">up</span>,<span class="direction-1">down</span>)</th>
+          <th nzColumnKey="Promoter">Promoter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of G4Date">
+          <td>{{data.ID}}</td>
+          <td>{{data.T1}}</td>
+          <td>{{data.T2}}</td>
+          <td>{{data.T3}}</td>
+          <td>{{data.T4}}</td>
+          <td>{{data.TS}}</td>
+          <td>{{data.GS}}</td>
+          <td nzBreakWord>{{data.SEQ}}</td>
+          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" class="direction{{col[2]}}" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+          <input type="search" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+          <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+          <button nz-button nzSize="small" (click)="reset()">Reset</button>
+        </div>
+      </div>
+    </nz-dropdown-menu>
+</mat-tab-nav-panel>
 

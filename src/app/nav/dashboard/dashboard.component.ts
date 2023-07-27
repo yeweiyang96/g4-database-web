@@ -24,20 +24,22 @@ export class DashboardComponent implements OnInit{
     private ApiService: ApiService,
     private router: ActivatedRoute
   ) {
-    this.species = this.MessageService.getName();
-    console.log(this.species.abbreviation);
+    this.router.parent?.params.subscribe(params => {this.abb = params['abb'];this.ApiService.getSpeciesInfo(params['abb']).subscribe(speciesInfo => {
+      this.speciesInfo = speciesInfo;
+    }); });
+    // this.species = this.MessageService.getName();
+
   }
 
   ngOnInit(): void {
-    this.species = this.MessageService.getName();
-    this.getSpeciesInfo();
+    // this.species = this.MessageService.getName();
+    // this.getSpeciesInfo();
   }
 
-  getSpeciesInfo(): void {
-    console.log(this.abb);
-    this.ApiService.getSpeciesInfo(this.species.abbreviation).subscribe(speciesInfo => {
-      console.log(this.abb);
-      this.speciesInfo = speciesInfo;
-    });
-  }
+  // getSpeciesInfo(): void {
+
+  //   this.ApiService.getSpeciesInfo(this.species.abbreviation).subscribe(speciesInfo => {
+  //     this.speciesInfo = speciesInfo;
+  //   });
+  // }
 }

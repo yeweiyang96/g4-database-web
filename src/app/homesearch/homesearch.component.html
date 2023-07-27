@@ -5,16 +5,25 @@
     <input matInput #searchBox id="search-box" placeholder="Pick one" (input)="search(searchBox.value)" type="search"
       [matAutocomplete]="auto" [formControl]="myControl" />
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let one of result$ | async" [value]="one.name"
-        routerLink="/{{selected}}/{{one.abbreviation}}" (click)="onClick(one)">
+      <mat-option *ngFor="let one of result$ | async" [value]="one"
+        (click)="onClick(one)">
         <div mat-line>{{one.name}} </div>
         <span mat-line class="no-match"> {{one.abbreviation}}</span>
       </mat-option>
-      <mat-option *ngIf="(result$ | async)?.length === 0">
+      <mat-option *ngIf="(result$ | async)?.length === 0 && selected==='species'">
         <mat-icon color="">error</mat-icon>
         <div mat-line>0 results</div>
         <div mat-line class="no-match">No matching presidents</div>
       </mat-option>
+      <mat-option *ngIf="(searchBox.value.length < 6) && selected=='gene'">
+        <mat-icon color="">error</mat-icon>
+        <div mat-line>Keywords number must more than 5!</div>
+        </mat-option>
+        <mat-option *ngIf="((searchBox.value.length > 5) && selected=='gene') && (result$ | async)?.length === 0">
+          <mat-icon color="">error</mat-icon>
+        <div mat-line>0 results</div>
+        <div mat-line class="no-match">No matching presidents</div>
+          </mat-option>
     </mat-autocomplete>
   </mat-form-field>
   <mat-chip-listbox aria-label="search bar selection" class="chip" (change)="onSelected($event)">

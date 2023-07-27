@@ -5,6 +5,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { NavComponent } from './nav/nav.component';
 import { DashboardComponent } from './nav/dashboard/dashboard.component';
 import { TableComponent } from './nav/table/table.component';
+import { GeneComponent } from './gene/gene.component';
 
 const routes: Routes = [
   {path: 'home', component: HomepageComponent, title: 'Home'},
@@ -16,6 +17,7 @@ const routes: Routes = [
     {path: '**', redirectTo: 'info', pathMatch: 'full'}
   ]
 },
+{path: 'gene/:abb/:name', component: GeneComponent, title: 'Gene',},
   // {
   //   path: 'taxonomy/:name', component: SpeciesInfoComponent,
   //   children: [

@@ -11,10 +11,8 @@ export class MessageService {
   chromosome$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   setName(name: SearchResult){
     this.name = name;
-    console.log("Service: "+this.name.abbreviation);
   }
   getName(){
-    console.log("getService: "+this.name.abbreviation);
     return this.name;
   }
 
