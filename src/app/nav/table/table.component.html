@@ -37,7 +37,8 @@
               <mat-icon>search</mat-icon>
             </nz-filter-trigger>
           </th>
-          <th nzColumnKey="Gene">Gene(<span class="direction1">up</span>,<span class="direction-1">down</span>)</th>
+          <th nzColumnKey="Complement">Complement</th>
+          <th nzColumnKey="Gene">Gene</th>
           <th nzColumnKey="Promoter">Promoter</th>
         </tr>
       </thead>
@@ -51,7 +52,8 @@
           <td>{{data.TS}}</td>
           <td>{{data.GS}}</td>
           <td nzBreakWord>{{data.SEQ}}</td>
-          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" class="direction{{col[2]}}" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+          <td nzBreakWord>{{complement(data.SEQ)}}</td>
+          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
           <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
         </tr>
       </tbody>

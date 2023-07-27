@@ -12,7 +12,7 @@ import { G4 } from 'src/app/pojo/G4';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit{
+export class TableComponent implements OnInit {
   abb!: string;
   chromosome!: string;
   direction: string = 'raw';
@@ -37,10 +37,10 @@ export class TableComponent implements OnInit{
     filter: Array<{ key: string; value: string[] }>
   ): void {
     this.loading = true;
-    this.ApiService.getTableSize(abb,genome,direction).subscribe(data => {
+    this.ApiService.getTableSize(abb, genome, direction).subscribe(data => {
       this.total = data;
     });
-    this.ApiService.getG4Date(abb,genome,direction,pageIndex, pageSize, sortField, sortOrder, filter).subscribe(data => {
+    this.ApiService.getG4Date(abb, genome, direction, pageIndex, pageSize, sortField, sortOrder, filter).subscribe(data => {
       this.loading = false;
 
       this.G4Date = data;
@@ -54,12 +54,12 @@ export class TableComponent implements OnInit{
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
-    this.loadDataFromServer(this.abb,this.chromosome,this.direction,pageIndex, pageSize, sortField, sortOrder, filter);
+    this.loadDataFromServer(this.abb, this.chromosome, this.direction, pageIndex, pageSize, sortField, sortOrder, filter);
   }
 
   onClick(direction: string): void {
     this.direction = direction;
-    this.loadDataFromServer(this.abb,this.chromosome,direction,this.pageIndex, this.pageSize, null, null, []);
+    this.loadDataFromServer(this.abb, this.chromosome, direction, this.pageIndex, this.pageSize, null, null, []);
   }
 
   reset(): void {
@@ -82,10 +82,10 @@ export class TableComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.router.params.subscribe(params => {this.chromosome = params['genome'];});
-    this.router.parent?.params.subscribe(params => {this.abb = params['abb'];});
+    this.router.params.subscribe(params => { this.chromosome = params['genome']; });
+    this.router.parent?.params.subscribe(params => { this.abb = params['abb']; });
     this.MessageService.chromosome$.subscribe(_ => {
-      this.loadDataFromServer(this.abb,this.chromosome,this.direction,this.pageIndex, this.pageSize, null, null, []);
+      this.loadDataFromServer(this.abb, this.chromosome, this.direction, this.pageIndex, this.pageSize, null, null, []);
     });
   }
 
@@ -93,5 +93,36 @@ export class TableComponent implements OnInit{
     return gene.map(g => g.split(':'));
   }
 
+  complement(seq: string): string {
+    let complementSeq = '';
+    for (let i = 0; i < seq.length; i++) {
+      switch (seq[i]) {
+        case 'A':
+          complementSeq += 'T';
+          break;
+        case 'T':
+          complementSeq += 'A';
+          break;
+        case 'C':
+          complementSeq += 'G';
+          break;
+        case 'G':
+          complementSeq += 'C';
+          break;
+        default:
+          complementSeq += seq[i];
+          break;
+      }
+    }
+    return complementSeq;
+  }
 
+  isComplement(sign: string): string {
+    if (sign === '1') {
+      return '+';
+    } else if (sign === '-1') {
+      return '-';
+    }
+    return '';
+  }
 }

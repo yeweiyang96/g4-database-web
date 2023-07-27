@@ -14,7 +14,7 @@ import { Gene } from './pojo/Gene';
 })
 export class ApiService {
 
-  private apiUrl = 'https://g4.haise.gq:8080';
+  private apiUrl = 'http://192.168.86.29:8000';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,7 +27,7 @@ export class ApiService {
     if (!search.term.trim()) {
       // if not search term, return empty array.
       return of([]);
-    } else if (search.type === 'gene' && search.term.length < 6) {
+    } else if (search.type === 'gene' && search.term.length < 2) {
       return of([]);
     }
     return this.http.get<SearchResult[]>(`${this.apiUrl}/${search.type}/${search.term}`);
