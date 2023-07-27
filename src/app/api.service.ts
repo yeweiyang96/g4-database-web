@@ -7,13 +7,14 @@ import { SearchResult } from './pojo/SearchResult';
 import { Search } from './pojo/Search';
 import { Species } from './pojo/Species';
 import { G4 } from './pojo/G4';
+import { Gene } from './pojo/Gene';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private apiUrl = 'http://192.168.1.3:8000';
+  private apiUrl = 'https://g4.haise.gq:8080';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -81,9 +82,10 @@ export class ApiService {
     return this.http.get<number>(`${this.apiUrl}/g4_size/${abb}_${genome}_${direction}`);
   }
 
-  getGene(abb: string, name: string): Observable<any> {
+  getGene(abb: string, name: string): Observable<Gene> {
+    console.log(`${this.apiUrl}/gene/${abb}/${name}`);
 
-    return this.http.get<any>(`${this.apiUrl}/gene/${abb}_${name}`);
+    return this.http.get<Gene>(`${this.apiUrl}/gene/${abb}/${name}`);
   }
 
 }
