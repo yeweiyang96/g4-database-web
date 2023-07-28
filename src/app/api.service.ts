@@ -92,4 +92,11 @@ export class ApiService {
   getG4SEQ(abb: string, genome: string, name: string): Observable<G4_SEQ> {
     return this.http.get<G4_SEQ>(`${this.apiUrl}/g4_seq/${abb}/${genome}/${name}`);
   }
+
+  getG4displot(abb: string,genome: string, direction: string, ts: number, length: number): Observable<Blob> {
+    let params = new HttpParams()
+    .append('ts', `${ts}`)
+    .append('length', `${length}`);
+    return this.http.get(`${this.apiUrl}/g4_displot/${abb}/${genome}/${direction}`, { params, responseType: 'blob' });
+  }
 }

@@ -1,10 +1,11 @@
 import { MessageService } from './../../message.service';
 import { ApiService } from 'src/app/api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { G4 } from 'src/app/pojo/G4';
+import { NgOptimizedImage } from '@angular/common'
 
 
 @Component({
@@ -12,7 +13,7 @@ import { G4 } from 'src/app/pojo/G4';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
   abb!: string;
   chromosome!: string;
   direction: string = 'raw';
@@ -24,6 +25,7 @@ export class TableComponent implements OnInit {
   pageIndex = 1;
   searchValue = '';
   visible = false;
+  g4_img!: any;
 
 
   loadDataFromServer(
@@ -60,6 +62,9 @@ export class TableComponent implements OnInit {
   onClick(direction: string): void {
     this.direction = direction;
     this.loadDataFromServer(this.abb, this.chromosome, direction, this.pageIndex, this.pageSize, null, null, []);
+    this.ApiService.getG4displot(this.abb, this.chromosome, this.direction, 2, 100000).subscribe(data => {
+      this.g4_img = URL.createObjectURL(data);
+    });
   }
 
   reset(): void {
@@ -86,7 +91,17 @@ export class TableComponent implements OnInit {
     this.router.parent?.params.subscribe(params => { this.abb = params['abb']; });
     this.MessageService.chromosome$.subscribe(_ => {
       this.loadDataFromServer(this.abb, this.chromosome, this.direction, this.pageIndex, this.pageSize, null, null, []);
+      this.ApiService.getG4displot(this.abb, this.chromosome, this.direction, 2, 100000).subscribe(data => {
+        this.g4_img = URL.createObjectURL(data);
+      });
     });
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    URL.revokeObjectURL(this.g4_img);
+
   }
 
   g4_gene(gene: string[]): string[][] {
@@ -126,3 +141,9 @@ export class TableComponent implements OnInit {
     return '';
   }
 }
+//TODO 1. 给图片生成添加控制台,可以选择,片段大小和ts的数量,做数值检查,从后台获取最大片段长度,商讨最小片段长度
+//TODO 2. 图片的获取逻辑,重新检查.(刷新,点击染色体,点击direction).获取新图片时,先屏蔽旧图片.研究他人代码https://stackoverflow.com/questions/45530752/getting-image-from-api-in-angular-4-5
+//TODO 3. 优化图片的显示,根据片段的数量来决定图片的宽度.
+//TODO 4. python代码,图片生成时,如果数据库为空.则返回空图片,然后前端进行判断,如果是空图片,则不显示图片,并且显示提示信息.
+//TODO 5. 研究图片虚拟横向滚动
+//TODO 6. 研究前端生成displot
