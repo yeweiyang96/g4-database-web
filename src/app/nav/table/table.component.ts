@@ -5,12 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { G4 } from 'src/app/pojo/G4';
-import { NgOptimizedImage } from '@angular/common'
+import { FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
+
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit, OnDestroy {
@@ -26,7 +29,37 @@ export class TableComponent implements OnInit, OnDestroy {
   searchValue = '';
   visible = false;
   g4_img!: any;
+  ts = new FormControl(2);
+  length = new FormControl(100000);
+  img_loading = true;
 
+  constructor(
+    private ApiService: ApiService,
+    private router: ActivatedRoute,
+    private MessageService: MessageService,
+    private _snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit() {
+    this.router.params.subscribe(params => { this.chromosome = params['genome']; });
+    this.router.parent?.params.subscribe(params => { this.abb = params['abb']; });
+    this.ts.setValue(2);
+    this.length.setValue(100000);
+    this.MessageService.chromosome$.subscribe(_ => {
+      this.g4_img = null;
+      this.ts.setValue(2);
+      this.length.setValue(100000);
+      this.loadDataFromServer(this.abb, this.chromosome, this.direction, this.pageIndex, this.pageSize, null, null, []);
+      this.getImg();
+    });
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    URL.revokeObjectURL(this.g4_img);
+
+  }
 
   loadDataFromServer(
     abb: string,
@@ -44,7 +77,6 @@ export class TableComponent implements OnInit, OnDestroy {
     });
     this.ApiService.getG4Date(abb, genome, direction, pageIndex, pageSize, sortField, sortOrder, filter).subscribe(data => {
       this.loading = false;
-
       this.G4Date = data;
     });
 
@@ -62,9 +94,7 @@ export class TableComponent implements OnInit, OnDestroy {
   onClick(direction: string): void {
     this.direction = direction;
     this.loadDataFromServer(this.abb, this.chromosome, direction, this.pageIndex, this.pageSize, null, null, []);
-    this.ApiService.getG4displot(this.abb, this.chromosome, this.direction, 2, 100000).subscribe(data => {
-      this.g4_img = URL.createObjectURL(data);
-    });
+    this.getImg();
   }
 
   reset(): void {
@@ -77,38 +107,11 @@ export class TableComponent implements OnInit, OnDestroy {
     this.G4Date = this.G4Date.filter((item: G4) => item.SEQ.indexOf(this.searchValue) !== -1);
   }
 
-
-  constructor(
-    private ApiService: ApiService,
-    private router: ActivatedRoute,
-    private MessageService: MessageService
-  ) {
-
-  }
-
-  ngOnInit() {
-    this.router.params.subscribe(params => { this.chromosome = params['genome']; });
-    this.router.parent?.params.subscribe(params => { this.abb = params['abb']; });
-    this.MessageService.chromosome$.subscribe(_ => {
-      this.loadDataFromServer(this.abb, this.chromosome, this.direction, this.pageIndex, this.pageSize, null, null, []);
-      this.ApiService.getG4displot(this.abb, this.chromosome, this.direction, 2, 100000).subscribe(data => {
-        this.g4_img = URL.createObjectURL(data);
-      });
-    });
-  }
-
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    URL.revokeObjectURL(this.g4_img);
-
-  }
-
   g4_gene(gene: string[]): string[][] {
     return gene.map(g => g.split(':'));
   }
 
-  complement(seq: string): string {
+  reverse_complement(seq: string): string {
     let complementSeq = '';
     for (let i = 0; i < seq.length; i++) {
       switch (seq[i]) {
@@ -129,7 +132,7 @@ export class TableComponent implements OnInit, OnDestroy {
           break;
       }
     }
-    return complementSeq;
+    return complementSeq.split('').reverse().join('');
   }
 
   isComplement(sign: string): string {
@@ -140,10 +143,23 @@ export class TableComponent implements OnInit, OnDestroy {
     }
     return '';
   }
+
+  getImg(): void {
+    this.ApiService.getG4displot(this.abb, this.chromosome, this.direction, this.ts.value, this.length.value).subscribe(data => {
+
+      if (data.size < 3) {
+        // this.ts.setValue(2);
+        // this.length.setValue(100000);
+        this._snackBar.open("Error", "Close");
+        this.img_loading = true;
+      }
+      else {
+        this.g4_img = URL.createObjectURL(data);
+        this.img_loading = false;
+      }
+
+    });
+  }
 }
-//TODO 1. 给图片生成添加控制台,可以选择,片段大小和ts的数量,做数值检查,从后台获取最大片段长度,商讨最小片段长度
-//TODO 2. 图片的获取逻辑,重新检查.(刷新,点击染色体,点击direction).获取新图片时,先屏蔽旧图片.研究他人代码https://stackoverflow.com/questions/45530752/getting-image-from-api-in-angular-4-5
-//TODO 3. 优化图片的显示,根据片段的数量来决定图片的宽度.
-//TODO 4. python代码,图片生成时,如果数据库为空.则返回空图片,然后前端进行判断,如果是空图片,则不显示图片,并且显示提示信息.
 //TODO 5. 研究图片虚拟横向滚动
 //TODO 6. 研究前端生成displot

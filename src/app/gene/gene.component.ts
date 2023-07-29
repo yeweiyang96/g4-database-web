@@ -15,8 +15,8 @@ export class GeneComponent implements OnInit {
   abb!: string;
   name!: string;
   gene!: Gene;
-  RawColumns: string[] = ['ID', 'Position 1', 'Position 2', 'Position 3','Position 4','Number of tetrads','G-Score','Sequence','Gene','Promoter'];
-  ComplementColumns: string[] = ['ID', 'Position 1', 'Position 2', 'Position 3','Position 4','Number of tetrads','G-Score','Sequence\n(G-rich)','Complement\n(C-Rich)','Gene','Promoter'];
+  RawColumns: string[] = ['ID', 'Position 1', 'Position 2', 'Position 3','Position 4','Number of tetrads','G-Score','Sequence\n(G-rich)','Gene','Promoter'];
+  ComplementColumns: string[] = ['ID', 'Position 1', 'Position 2', 'Position 3','Position 4','Number of tetrads','G-Score','Sequence','Reverse Complement\n(C-Rich)','Gene','Promoter'];
   table!:G4_SEQ;
   dataSource_raw!:G4[];
   dataSource_complement!:G4[];
@@ -48,7 +48,7 @@ export class GeneComponent implements OnInit {
     return gene.map(g => g.split(':'));
   }
 
-  complement(seq: string): string {
+  reverse_complement(seq: string): string {
     let complementSeq = '';
     for (let i = 0; i < seq.length; i++) {
       switch (seq[i]) {
@@ -69,7 +69,7 @@ export class GeneComponent implements OnInit {
           break;
       }
     }
-    return complementSeq;
+    return complementSeq.split('').reverse().join('');
   }
 
   isComplement(sign: string): string {

@@ -32,7 +32,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { TableComponent } from './nav/table/table.component';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
@@ -91,7 +91,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzTableModule,
     NzDropDownModule,
     NzButtonModule,
-    NzInputModule
+    NzInputModule,
+    MatSnackBarModule
+
 
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons } ],

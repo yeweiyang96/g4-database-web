@@ -90,7 +90,7 @@
                   <td>{{ data.TS }}</td>
                   <td>{{ data.GS }}</td>
                   <td nzBreakWord>{{ data.SEQ }}</td>
-                  <td nzBreakWord class="complement">{{complement(data.SEQ)}}</td>
+                  <td nzBreakWord class="complement">{{reverse_complement(data.SEQ)}}</td>
                   <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)"
                       routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span
                         *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
@@ -104,11 +104,16 @@
       </mat-tab-group>
     </mat-card-content>
   </mat-card>
+  <mat-card class="dashboard-card">
+    <mat-card-content class="dashboard-card-content">
+      <iframe src="https://jbrowse.org/code/jb2/v2.6.2/" width="100%" height="500px" class="jbrowse">
+
+      </iframe>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 
 
 
-<!-- <iframe src="https://jbrowse.org/code/jb2/v2.6.2/?session=local-DVUfbNz66" width="100%" height="500px" class="jbrowse">
 
-</iframe> -->
