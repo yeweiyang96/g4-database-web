@@ -52,7 +52,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <cdk-virtual-scroll-viewport [itemSize]="10" class="vscroll-viewport">
-                <p *cdkVirtualFor="let seq of speciesInfo.refseq.split(',')" class="vscroll-item">{{seq}}</p>
+                <a *cdkVirtualFor="let seq of speciesInfo.refseq.split(',')" class="vscroll-item" [href]='"https://www.genome.jp/dbget-bin/www_bget?refseq+"+seq'>{{seq}}<br></a>
               </cdk-virtual-scroll-viewport>
             </mat-expansion-panel>
           </mat-accordion>
@@ -70,7 +70,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <cdk-virtual-scroll-viewport [itemSize]="10" class="vscroll-viewport">
-                <p *cdkVirtualFor="let seq of speciesInfo.genbank.split(',')" class="vscroll-item">{{seq}}</p>
+                <a *cdkVirtualFor="let seq of speciesInfo.genbank.split(',')" class="vscroll-item" [href]='"https://www.ncbi.nlm.nih.gov/nuccore/"+seq'>{{seq}}<br></a>
               </cdk-virtual-scroll-viewport>
             </mat-expansion-panel>
           </mat-accordion>

@@ -7,6 +7,8 @@ import { SearchResult } from './pojo/SearchResult';
 import { Search } from './pojo/Search';
 import { Species } from './pojo/Species';
 import { G4 } from './pojo/G4';
+import { Gene } from './pojo/Gene';
+import { G4_SEQ } from './pojo/G4_SEQ';
 
 @Injectable({
   providedIn: 'root'
@@ -81,9 +83,20 @@ export class ApiService {
     return this.http.get<number>(`${this.apiUrl}/g4_size/${abb}_${genome}_${direction}`);
   }
 
-  getGene(abb: string, name: string): Observable<any> {
-
-    return this.http.get<any>(`${this.apiUrl}/gene/${abb}_${name}`);
+  getGene(abb: string, name: string): Observable<Gene> {
+    return this.http.get<Gene>(`${this.apiUrl}/gene/${abb}/${name}`);
   }
 
+  getG4SEQ(abb: string, genome: string, name: string): Observable<G4_SEQ> {
+    return this.http.get<G4_SEQ>(`${this.apiUrl}/g4_seq/${abb}/${genome}/${name}`);
+  }
+
+  getG4displot(abb: string, genome: string, direction: string, ts: number | null, length: number | null): Observable<Blob> {
+    let params = new HttpParams()
+      .append('ts', `${ts}`)
+      .append('length', `${length}`);
+    return this.http
+      .get(`${this.apiUrl}/g4_displot/${abb}/${genome}/${direction}`, { params, responseType: 'blob' })
+      .pipe(catchError(() => of()));
+  }
 }

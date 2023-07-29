@@ -33,9 +33,10 @@ export class NavComponent implements OnInit {
     }
 
   ngOnInit(): void {
+
     this.apiService.getName(this.abb).subscribe(data => {
       this.name = data;
-      this.MessageService.setName({name: this.name,abbreviation: this.abb});
+      // this.MessageService.setName({name: this.name,abbreviation: this.abb});
     });
 
     this.apiService.getGenomes(this.abb).subscribe(data => {

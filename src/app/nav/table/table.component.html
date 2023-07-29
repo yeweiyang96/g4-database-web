@@ -1,7 +1,25 @@
-<h1>{{chromosome}}</h1>
-<!-- <ng-container *ngIf="(asyncTabs | async) === null">
-  Loading tabs...
-</ng-container> -->
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>{{chromosome}}</mat-card-title>
+    <mat-card-subtitle></mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="g4_img" *ngIf="!img_loading" alt="TS Image" class="img"/>
+
+  <mat-card-content>
+    <mat-form-field appearance="fill" class="input">
+      <mat-label>Number of tetrads</mat-label>
+      <input matInput type="number"  [formControl]="ts" min="1">
+    </mat-form-field>
+    <mat-form-field appearance="fill"  class="input">
+      <mat-label>Length</mat-label>
+      <input matInput type="number" [formControl]="length" min="1">
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" class="submit-button" (click)="getImg()">SUBMIT</button>
+  </mat-card-actions>
+</mat-card>
+
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
   <a mat-tab-link
      (click)="activeLink = 'raw'; onClick('raw')"
@@ -32,12 +50,13 @@
           <th nzColumnKey="TS" [nzSortFn]="true">Number of tetrads</th>
           <th nzColumnKey="GS" [nzSortFn]="true">G-Score</th>
           <th nzColumnKey="SEQ" nzCustomFilter [nzFilterFn]="true">
-            Sequence
+            Sequence<br><span *ngIf="(direction === 'raw')" >(G-Rich)</span>
             <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
               <mat-icon>search</mat-icon>
             </nz-filter-trigger>
           </th>
-          <th nzColumnKey="Gene">Gene(<span class="direction1">up</span>,<span class="direction-1">down</span>)</th>
+          <th nzColumnKey="Complement" *ngIf="(direction === 'c')" >ReverseComplement<br>(C-rich)</th>
+          <th nzColumnKey="Gene">Gene</th>
           <th nzColumnKey="Promoter">Promoter</th>
         </tr>
       </thead>
@@ -51,7 +70,8 @@
           <td>{{data.TS}}</td>
           <td>{{data.GS}}</td>
           <td nzBreakWord>{{data.SEQ}}</td>
-          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" class="direction{{col[2]}}" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
+          <td nzBreakWord *ngIf="(direction === 'c')" class="complement">{{reverse_complement(data.SEQ)}}</td>
+          <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}<span *ngIf="isComplement(col[2])">({{isComplement(col[2])}})</span><br></a></td>
           <td nzBreakWord><a *ngFor="let col of g4_gene(data.Gene)" routerLink="/gene/{{col[0]}}/{{col[1]}}">{{col[1]}}</a></td>
         </tr>
       </tbody>

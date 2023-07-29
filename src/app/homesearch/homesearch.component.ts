@@ -36,7 +36,7 @@ export class HomesearchComponent implements OnInit {
 
     this.result$ = this.searchTerms.pipe(
       // wait 300ms after each keystroke before considering the term
-      debounceTime(350),
+      debounceTime(500),
 
       // ignore new term if same as previous term
       distinctUntilChanged(),
